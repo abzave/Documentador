@@ -1,4 +1,5 @@
 import glob
+import re
 
 #Variables globales
 parametros = []
@@ -106,30 +107,57 @@ def preguntarArchivos(ruta = ""):
         return preguntarArchivos(ruta)
     listarArchivos(archivos)
     archivo = input("Ingrese el número del archivo o una ruta en la que buscar: ")
-    if archivo.isnumeric() and int(archivo) < len(archivos):
+    if archivo.isnumeric() and int(archivo) <= len(archivos):
         return ruta + "\\" + archivos[int(archivo) - 1] if ruta != "" else "" + archivos[int(archivo) - 1]
-    elif archivo.isnumeric() and int(archivo) >= len(archivos):
+    elif archivo.isnumeric() and int(archivo) > len(archivos):
         print("Debe ingresar un números entre 1 y", len(archivos))
         preguntarArchivos()
     else:
         return preguntarArchivos(archivo)
-    
+
+def esInit(linea):
+    if "__init__(self" in linea:
+        return True
+    else:
+        return False
+
+def esSetterOGetter(linea):
+    patronSet = re.compile("^    def set[A-Z][a-z]")
+    patronGet = re.compile("^    def get[A-Z][a-z]")
+    if patronSet.match(linea) or patronGet.match(linea):
+        return True
+    else:
+        return False
+
+def continuar():
+    opcion = input("¿Desea continuar? S/N: ")
+    if opcion == "S" or opcion == "s":
+        return True
+    elif opcion == "N" or opcion == "n":
+        return False
+    else:
+        print("Debe ingresar S o N")
+        return continuar()
+
 #Programa principal
-datos, nombre = abrirArchivo(preguntarArchivos())
-for i in range(len(datos)):
-    resetearVariables()
-    if "def " in datos[i]:
-        if estaDocumentado(datos, i):
-            continue
-        opcion = input("¿Documentar " + datos[i][4:datos[i].index("(")] + "? Ingrese -1 para no, en otro caso es si: ")
-        if opcion == "-1":
-            continue
-        tabulaciones = adaptarIdentaciones(datos[i], tabulaciones)
-        parametros = obtenerParametros(datos[i], parametros)
-        if len(parametros) == 0:
-            entradas = "N/A"
-        else:
-            entradas = pedirEntradas(parametros, entradas)
-        salidas = input("Ingrese las salidas: ")
-        funcionamiento = input("Ingrese el funcionamiento: ")
-        escribirDocumentacion(tabulaciones, entradas, salidas, funcionamiento, datos, nombre)
+while True:
+    datos, nombre = abrirArchivo(preguntarArchivos())
+    for i in range(len(datos)):
+        resetearVariables()
+        if "def " in datos[i]:
+            if estaDocumentado(datos, i) or esInit(datos[i]) or esSetterOGetter(datos[i]):
+                continue
+            opcion = input("¿Documentar " + datos[i][4:datos[i].index("(")] + "? Ingrese -1 para no, en otro caso es si: ")
+            if opcion == "-1":
+                continue
+            tabulaciones = adaptarIdentaciones(datos[i], tabulaciones)
+            parametros = obtenerParametros(datos[i], parametros)
+            if len(parametros) == 0:
+                entradas = "N/A"
+            else:
+                entradas = pedirEntradas(parametros, entradas)
+            salidas = input("Ingrese las salidas: ")
+            funcionamiento = input("Ingrese el funcionamiento: ")
+            escribirDocumentacion(tabulaciones, entradas, salidas, funcionamiento, datos, nombre)
+    if not continuar():
+        break
