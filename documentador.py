@@ -33,9 +33,9 @@ def adaptarIdentaciones(linea, tabulaciones):
 def obtenerParametros(linea, parametros):
     if linea.count(")") == 1:
         parametros += linea[linea.index("(")+1:linea.index(")")].split(",")
+        parametros.remove("")
     else:
         parametros += linea[linea.index("(")+1:linea.index(")", len(linea) - 3)].split(",")
-    print(parametros)
     borrar, parametros = quitarValoresPorOmision(parametros)
     parametros = quitarTuplasPorOmision(linea, borrar, parametros)
     parametros = quitarSelf(parametros)
@@ -46,14 +46,14 @@ def quitarValoresPorOmision(parametros):
     for i in range(len(parametros)):
         if "=" in parametros[i]:
             parametros[i] = parametros[i][:parametros[i].index("=")]
-        if parametros[i] != "" and not parametros[i][0].isalpha():
-            borrar += parametros[i:i + 1]
+        if not parametros[i][0].isalpha():
+            borrar += [parametros[i]]
     return borrar, parametros
 
 def quitarTuplasPorOmision(linea, borrar, parametros):
     if linea.count(")") != 1:
         for i in range(len(borrar)):
-            parametros.remove(list(borrar)[i])
+            parametros.remove(borrar[i])
     return parametros
 
 def quitarSelf(parametros):
