@@ -35,6 +35,7 @@ def obtenerParametros(linea, parametros):
         parametros += linea[linea.index("(")+1:linea.index(")")].split(",")
     else:
         parametros += linea[linea.index("(")+1:linea.index(")", len(linea) - 3)].split(",")
+    print(parametros)
     borrar, parametros = quitarValoresPorOmision(parametros)
     parametros = quitarTuplasPorOmision(linea, borrar, parametros)
     parametros = quitarSelf(parametros)
@@ -45,7 +46,7 @@ def quitarValoresPorOmision(parametros):
     for i in range(len(parametros)):
         if "=" in parametros[i]:
             parametros[i] = parametros[i][:parametros[i].index("=")]
-        if not parametros[i][0].isalpha():
+        if parametros[i] != "" and not parametros[i][0].isalpha():
             borrar += parametros[i:i + 1]
     return borrar, parametros
 
