@@ -68,6 +68,7 @@ def pedirEntradas(parametros, entradas):
             entradas += " y "
         else:
             entradas += ", "
+    return entradas
 
 def escribirDocumentacion(tabulaciones, entradas, salidas, funcionamiento, datos, nombre):
     datos = datos[:i+1] + [tabulaciones + '"""\n' + tabulaciones + 'Entradas: ' + entradas + '\n' + tabulaciones + 'Salidas: ' + salidas + '\n' + tabulaciones + 'Funcionamiento: ' + funcionamiento + '\n' + tabulaciones + '"""\n'] +datos[i+1:]
