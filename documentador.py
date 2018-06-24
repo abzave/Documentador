@@ -8,7 +8,7 @@ salidas = ""
 funcionamiento = ""
 tabulaciones = "    "
 
-#Definición de funciones
+#DefiniciÃ³n de funciones
 def abrirArchivo(nombre):
     archivo = open(nombre, "r")
     datos = archivo.readlines()
@@ -33,7 +33,8 @@ def adaptarIdentaciones(linea, tabulaciones):
 def obtenerParametros(linea, parametros):
     if linea.count(")") == 1:
         parametros += linea[linea.index("(")+1:linea.index(")")].split(",")
-        parametros.remove("")
+        if "" in parametros:
+            parametros.remove("")
     else:
         parametros += linea[linea.index("(")+1:linea.index(")", len(linea) - 3)].split(",")
     borrar, parametros = quitarValoresPorOmision(parametros)
@@ -76,11 +77,14 @@ def escribirDocumentacion(tabulaciones, entradas, salidas, funcionamiento, datos
     archivo = open(nombre, "w")
     archivo.writelines(datos)
     archivo.close()
-    return
+    return datos
 
 def estaDocumentado(datos, indice):
     if '"""' in datos[indice - 1] or '"""' in datos[indice + 1]:
-        return True
+        if "Entradas:" in datos[indice - 2] or "Entradas:" in datos[indice + 2]:
+            return True
+        else:
+            return False
     else:
         return False
 
@@ -108,11 +112,11 @@ def preguntarArchivos(ruta = ""):
         ruta = input("No se han encontrado archivos. Ingrese ruta en la que buscar: ")
         return preguntarArchivos(ruta)
     listarArchivos(archivos)
-    archivo = input("Ingrese el número del archivo o una ruta en la que buscar: ")
+    archivo = input("Ingrese el nÃºmero del archivo o una ruta en la que buscar: ")
     if archivo.isnumeric() and int(archivo) <= len(archivos):
         return ruta + "\\" + archivos[int(archivo) - 1] if ruta != "" else "" + archivos[int(archivo) - 1]
     elif archivo.isnumeric() and int(archivo) > len(archivos):
-        print("Debe ingresar un números entre 1 y", len(archivos))
+        print("Debe ingresar un nÃºmeros entre 1 y", len(archivos))
         preguntarArchivos()
     else:
         return preguntarArchivos(archivo)
@@ -132,7 +136,7 @@ def esSetterOGetter(linea):
         return False
 
 def continuar():
-    opcion = input("¿Desea continuar? S/N: ")
+    opcion = input("Â¿Desea continuar? S/N: ")
     if opcion == "S" or opcion == "s":
         return True
     elif opcion == "N" or opcion == "n":
@@ -149,7 +153,7 @@ while True:
         if "def " in datos[i]:
             if estaDocumentado(datos, i) or esInit(datos[i]) or esSetterOGetter(datos[i]):
                 continue
-            opcion = input("¿Documentar " + datos[i][4:datos[i].index("(")] + "? Ingrese -1 para no, en otro caso es si: ")
+            opcion = input("Â¿Documentar " + datos[i][4:datos[i].index("(")] + "? Ingrese -1 para no, en otro caso es si: ")
             if opcion == "-1":
                 continue
             tabulaciones = adaptarIdentaciones(datos[i], tabulaciones)
@@ -160,6 +164,6 @@ while True:
                 entradas = pedirEntradas(parametros, entradas)
             salidas = input("Ingrese las salidas: ")
             funcionamiento = input("Ingrese el funcionamiento: ")
-            escribirDocumentacion(tabulaciones, entradas, salidas, funcionamiento, datos, nombre)
+            datos = escribirDocumentacion(tabulaciones, entradas, salidas, funcionamiento, datos, nombre)
     if not continuar():
         break
