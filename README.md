@@ -1,13 +1,51 @@
-# Documentador
+# Python Documentation Generator
 
-Funcionalidades implementadas:
-Crea la documentación interna de cualquier programa escrito en Python. El archivo a documentar puede encontrarse en la misma dirección que el procente programa o también podrá especificarsele una ruta en la que buscar.
+This project generates code documentation for Python code. The goal of the project is to reduce the time spent writting code documentation.
 
-Explicación paso a paso:
-Una vez abierto el programa este mostrará un listado con todos los archivos con extensión .py en la carpeta actual. Aquí hay dos posibilidades, si el archivo a documentar se encuentra en la misma carpeta que el programa deberá ingresar el número en el que esté listado el archivo. También, si el archivo está en otro lugar, puede ingresar la ruta en que se desea buscar, esto volverá a listar todos los archivos .py que haya en la nueva ruta.
+## Table of Contents
+1. [Project Overview](#project-overview)
+2. [Features](#features)
+3. [Requirements](#requirements)
+4. [How to Compile and Run](#how-to-run)
+5. [Usage](#usage)
 
-Cuando ya esté seleccionado el archivo el archivo, este preguntará si desea documentar cada función o método encontrada. Para afirmar que se desea documentar dicha función o método puede ingresar cualquier cosa, para negarlo ingrese -1, lo que hará que se pase a la siguiente función. Cabe destacar que si la función ya se encuentra documentada o es un __init__ o un getter o setter no se le preguntará sobre esta.
+## Project Overview
 
-Al aceptar que se desea documentar una función se le preguntará por el tipo de dato de cada parametro, siempre cunado estos existan o el parametro no sea un self. Luego, se prosigue consultado por las salidas de la función o método y por último sobre el funcionamiento de este. El proceso se repite hasta que ya no haya más funciones o métodos en el archivo.
+This documentation generator takes a Python file and looks for functions or methods lacking documentation. 
 
-Una vez termidas las funciones y/o métodos el archivo ya se encontrará totalmente documentado y se le consultará si desea continuar. Al ingresar S el programa se reiniciará, y al ingresar N saldrá del programa
+## Features
+
+- **Generate Docstring**: Takes care of adding docstrings to the functions and methods present in a Python file.
+- **List Python Files**: Lists all the files with extension `.py` in the current folder.
+- **Search File in Path**: Allows the user to enter a path and look for Python files there.
+- **Skip Functions and Methods**: Skips all constructors, getters, setters, and already documented functions and methods by default, as well as allowing the user to skip specific methods and functions.
+
+## Requirements
+
+- **Run everywhere with Python**: The project can run on any platform as long as it has a Python interpreter installed.
+- **Read available files**: The project lists all the Python files that are avaible to document.
+
+## How to Run
+
+### Step 1: Clone the repository
+
+``` bash
+git clone https://github.com/abzave/Documentador.git
+cd Documentador
+```
+
+### Step 3: Run the program
+
+``` bash
+python3 documentador.py
+```
+
+## Usage
+
+1. Select a file from the listed available files.
+    - If the file is located in a different path, enter the path where the file is located.
+2. The user will be asked to confirm that the current function or method needs to be document. This is repeated for every eligible fuction and method present in the file.
+    - If the function does not require documentation enter `-1`.
+3. For every parameter present except for `self`, the user will be prompted to specify the data type.
+4. Enter the output of the function or method if any.
+5. Provide a description of the function or method functionality.
