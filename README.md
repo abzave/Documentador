@@ -34,7 +34,7 @@ git clone https://github.com/abzave/Documentador.git
 cd Documentador
 ```
 
-### Step 3: Run the program
+### Step 2: Run the program
 
 ``` bash
 python3 documentador.py
